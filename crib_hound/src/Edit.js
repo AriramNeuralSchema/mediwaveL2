@@ -1,11 +1,11 @@
 import { Button, Modal, Form } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import apiClient from "./axios";
 import { storage } from "./firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 
-const Add = ({ handleClose, alertShowFunc }) => {
+const Edit = ({ handleClose, alertShowFunc, id }) => {
   const [disabled, setDisabled] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -25,6 +25,17 @@ const Add = ({ handleClose, alertShowFunc }) => {
     });
   };
 
+  useEffect(() => {
+    apiClient
+      .get("/cribs/" + id)
+      .then((res) => {
+        if (res.data.length) {
+          setFormData(res.data[0]);
+        }
+      })
+      .catch(() => {});
+  }, [id]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setDisabled(true);
@@ -42,30 +53,30 @@ const Add = ({ handleClose, alertShowFunc }) => {
       validation = false;
       errJSON.location = true;
     }
-    if (formData.file) {
-      errJSON.file = false;
-    } else {
-      validation = false;
-      errJSON.file = true;
-    }
+
     setFormError(errJSON);
     if (validation) {
       let data = {};
-      const imageRef = ref(storage, `cribs/${formData.file.name + v4()}`);
-      await uploadBytes(imageRef, formData.file).then(async (res) => {
-        return getDownloadURL(ref(storage, res.metadata.fullPath)).then(
-          (url) => {
-            data.image = url;
-          }
-        );
-      });
+      if (formData.file) {
+        const imageRef = ref(storage, `cribs/${formData.file.name + v4()}`);
+        await uploadBytes(imageRef, formData.file).then(async (res) => {
+          return getDownloadURL(ref(storage, res.metadata.fullPath)).then(
+            (url) => {
+              data.image = url;
+            }
+          );
+        });
+      } else {
+        data.image = formData.image;
+      }
+
       data.name = formData.name;
       data.location = formData.location;
       apiClient
-        .post("/cribs", data)
+        .put("/cribs/" + id, data)
         .then((res) => {
           setDisabled(false);
-          alertShowFunc(true, "Crib Added");
+          alertShowFunc(true, "Crib Updated");
           handleClose();
         })
         .catch((err) => {
@@ -141,15 +152,17 @@ const Add = ({ handleClose, alertShowFunc }) => {
               </>
             )}
           </Form.Group>
-          {/* {!formError.file && (
-            <img
-              key={i}
-              src={URL.createObjectURL(formData.file)} // Use createObjectURL to display local images
-              alt={`Selected Image`}
-              width="100"
-              height="100"
-            />
-          )} */}
+          {formData.image && (
+            <div align="center">
+              <img
+                className="mt-2"
+                src={formData.image} // Use createObjectURL to display local images
+                alt={`Selected Image`}
+                width="100"
+                height="100"
+              />
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button disabled={disabled} variant="primary" type="submit">
@@ -164,4 +177,4 @@ const Add = ({ handleClose, alertShowFunc }) => {
   );
 };
 
-export default Add;
+export default Edit;

@@ -1,8 +1,8 @@
 const mysql2 = require("mysql2");
 const connection = mysql2.createConnection({
-  host: "sql10.freemysqlhosting.net",
-  user: "sql10653411",
-  password: "H3x9WT2bBX",
+  host: "hyperloop.c15ujyuuwji7.ap-south-1.rds.amazonaws.com",
+  user: "admin",
+  password: "Pabbu123",
   database: "sql10653411",
 });
 
