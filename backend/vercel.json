@@ -1,10 +1,10 @@
 {
     "name": "myexpressserver",
     "version": "1.0.0",
-    "description": "",
+    "description": "node js deployment",
     "main": "index.js",
     "engines": {
-      "node":  "14.x" 
+      "node":  "16" 
     },
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
