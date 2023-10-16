@@ -6,7 +6,7 @@ const getCribesList = () => {
       if (err) {
         reject(err);
       } else {
-        let query = "select * from cribe_hound";
+        let query = "select * from crib_hound";
         conn.query(query, (err, res) => {
           if (err) {
             reject(err);
@@ -22,7 +22,7 @@ const getCribesList = () => {
 const addCribHound = (body) => {
   return new Promise((resolve, reject) => {
     const query =
-      "insert into cribe_hound (name, location, image) values (?, ?, ?)";
+      "insert into crib_hound (name, location, image) values (?, ?, ?)";
     const values = [body.name, body.location, body.image];
 
     db.query(query, values, (err, res) => {
@@ -39,7 +39,7 @@ const addCribHound = (body) => {
 const updateCribHound = (id, body) => {
   return new Promise((resolve, reject) => {
     const query =
-      "update cribe_hound set name = ?, location = ?, image = ? where id = ?";
+      "update crib_hound set name = ?, location = ?, image = ? where id = ?";
     const values = [body.name, body.location, body.image, id];
 
     db.query(query, values, (err, res) => {
@@ -55,7 +55,7 @@ const updateCribHound = (id, body) => {
 
 const deleteCribHound = (id) => {
   return new Promise((resolve, reject) => {
-    const query = "delete from cribe_hound where id = ?";
+    const query = "delete from crib_hound where id = ?";
     const values = [id];
 
     db.query(query, values, (err, res) => {
@@ -71,7 +71,7 @@ const deleteCribHound = (id) => {
 
 const getCribsInfo = (id) => {
   return new Promise((resolve, reject) => {
-    const query = "select * from cribe_hound WHERE id = ?";
+    const query = "select * from crib_hound WHERE id = ?";
     const values = [id];
 
     db.query(query, values, (err, res) => {

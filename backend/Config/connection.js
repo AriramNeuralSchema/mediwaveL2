@@ -1,12 +1,15 @@
 const mysql2 = require("mysql2");
 const connection = mysql2.createConnection({
-  host: "hyperloop.c15ujyuuwji7.ap-south-1.rds.amazonaws.com",
+  host: "mysql-150526-0.cloudclusters.net",
   user: "admin",
-  password: "Pabbu123",
+  password: "ckYYWSE8",
   database: "sql10653411",
+  connectTimeout: 50000,
+  port: 12759,
 });
 
 connection.connect((err) => {
+  console.log(err);
   if (err) throw err;
 });
 
